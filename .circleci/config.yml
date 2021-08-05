@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  one:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -8,22 +8,19 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      #- restore_cache:
-      #    key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run: echo "First Hello"
-      - run: echo "Second Hello"
-      - run: echo "Third Hello"
-      - run: echo "Fourth Hello"
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
-      #- save_cache:
-      #    paths:
-      #      - ~/.gradle
-      #    key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
           name: Run Tests
           command: ./gradlew lint test
@@ -32,3 +29,36 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+
+  two:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
+    steps:
+      - checkout
+      - run: echo "Second Hello"
+
+  three:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
+    steps:
+      - checkout
+      - run: echo "Third Hello"
+
+  four:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
+    steps:
+      - checkout
+      - run: echo "Fourth Hello"
+
+workflows:
+  version: 2
+  Test, build and distribute:
+    jobs:
+      - one
+      - two
+      - three
+      - four
