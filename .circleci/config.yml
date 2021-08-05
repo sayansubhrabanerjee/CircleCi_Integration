@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  one:
+  build:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
@@ -11,6 +11,9 @@ jobs:
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run: echo "First Hello"
+      - run: echo "Second Hello"
+      - run: echo "Third Hello"
+      - run: echo "Fourth Hello"
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
@@ -29,54 +32,3 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
-
-  two:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-      - run: echo "Second Hello"
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-
-  three:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-      - run: echo "Third Hello"
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-
-  four:
-    working_directory: ~/code
-    docker:
-      - image: circleci/android:api-29
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-      - run: echo "Fourth Hello"
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-
-workflows:
-  version: 2
-  Test, build and distribute:
-    jobs:
-      - one
-      - two
-      - three
-      - four
