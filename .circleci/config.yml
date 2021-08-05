@@ -32,16 +32,22 @@ jobs:
 
   two:
     working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
     steps:
       - run: echo "Second Hello"
 
   three:
     working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
     steps:
       - run: echo "Third Hello"
 
   four:
     working_directory: ~/code
+    docker:
+      - image: circleci/android:api-29
     steps:
       - run: echo "Fourth Hello"
 
