@@ -29,6 +29,13 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
+      - run:
+          name: Assemble Release build
+          command: |
+            ./gradlew assembleDebug
+      - store_artifacts:
+          path: app/build/outputs/apk
+          destination: apk
       - save_cache:
           paths:
             - ~/.gradle
